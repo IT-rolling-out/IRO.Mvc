@@ -1,0 +1,13 @@
+<!-- Imported in end of csproj. Here better to override some items. -->
+<Project>
+
+  <PropertyGroup Condition="$(IsNuPackage)">
+    <PackageIconUrl>https://gitlab.com/KogerCoder/sharedresources/raw/master/iro_nuget_logo.png</PackageIconUrl>
+  </PropertyGroup>
+  
+  <PropertyGroup>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <NoWarn>$(NoWarn);1591;1573</NoWarn>
+  </PropertyGroup>
+  
+</Project>
