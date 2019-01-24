@@ -12,16 +12,23 @@ namespace IRO.Mvc.CoolSwagger
 {
     public static class CoolSwaggerExtensions
     {
-        public static void AddDefaultCoolSwaggerFilters(this SwaggerGenOptions opt)
+        public static void AddSwaggerTagNameOperationFilter(this SwaggerGenOptions opt)
         {
             opt.OperationFilter<SwaggerTagNameOperationFilter>();
         }
 
+        /// <summary>
+        /// Use custom summory.
+        /// </summary>
+        /// <param name="opt"></param>
         public static void UseCoolSummaryGen(this SwaggerGenOptions opt)
         {
             opt.OperationFilter<SummaryOperationFilter>();
         }
 
+        /// <summary>
+        /// Include summary file of assembly.
+        /// </summary>
         public static void IncludeXmlCommentsOfAssembly(this SwaggerGenOptions opt, Assembly assembly)
         {
             var path = Path.ChangeExtension(assembly.CodeBase, ".xml");
@@ -32,11 +39,17 @@ namespace IRO.Mvc.CoolSwagger
             opt.IncludeXmlComments(path);
         }
 
+        /// <summary>
+        /// Include summary file of assembly.
+        /// </summary>
         public static void IncludeXmlCommentsOfAssembly(this SwaggerGenOptions opt, Type typeFromAssembly)
         {
             IncludeXmlCommentsOfAssembly(opt, typeFromAssembly.Assembly);
         }
 
+        /// <summary>
+        /// Include sall found summary files.
+        /// </summary>
         public static void IncludeAllAvailableXmlComments(this SwaggerGenOptions opt)
         {
             var xmlFiles=(new ImprovedFile()).Search(

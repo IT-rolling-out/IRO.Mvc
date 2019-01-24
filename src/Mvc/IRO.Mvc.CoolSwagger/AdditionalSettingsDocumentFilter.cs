@@ -4,7 +4,7 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace IRO.Mvc.CoolSwagger
 {
-    public class AdditionalSettingsDocumentFilter : IDocumentFilter
+    class AdditionalSettingsDocumentFilter : IDocumentFilter
     {
         Action<SwaggerDocument> _action;
 

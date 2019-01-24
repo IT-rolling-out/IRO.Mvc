@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace IRO.Tests.SwashbuckleTest.Exceptions
+namespace IRO.Tests.ExceptionHandlerTest.Exceptions
 {
     public class ClientException : Exception
     {

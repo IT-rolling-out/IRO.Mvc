@@ -3,15 +3,24 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <Version>$(AsmVersion_Mvc)</Version>
-    <Description>Надстройка над Swashbuckle c добавлением некоторых важных функций.</Description>
+    <Description>CoolSwagger - some extensions for Swashbuckle (tool to generate swagger.json from controllers).
+
+What it add:
+- Automatically searching for summary files.
+- Own summary generator, that add more info (include "parameter" and "return" summary).
+- Integrated with Identity. 
+- Can set tag name for controller or method with attribute.
+- SwaggerDocAdditional - set additional data.
+</Description>
+    <PackageProjectUrl>https://github.com/IT-rolling-out/IRO.Mvc/tree/master/src/Mvc/IRO.Mvc.CoolSwagger</PackageProjectUrl>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="4.0.1" />
     <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="4.0.1" />
     <PackageReference Include="Swashbuckle.AspNetCore.Filters" Version="4.5.2" />
-    <PackageReference Include="IRO.FileIO.ImprovedFileOperations" Version="1.0.3-alpha" />
-    <PackageReference Include="IRO.Reflection.SummarySearch" Version="1.0.3-alpha" />
+    <PackageReference Include="IRO.FileIO.ImprovedFileOperations" Version="$(AsmVersion_FileIO)" />
+    <PackageReference Include="IRO.Reflection.SummarySearch" Version="$(AsmVersion_Reflection)" />
   </ItemGroup>
 
   <ItemGroup>

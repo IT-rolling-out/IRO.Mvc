@@ -3,13 +3,14 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <Version>$(AsmVersion_Mvc)</Version>
-    <Description>Глобальный обработчик исключений для asp.net. Также поддерживает обработку http кодов. Работает совместно с DevExceptionPage.</Description>
+    <Description>Flexible library that allow you to easy handle all asp.net exceptions (and HTTP codes too).</Description>
+    <PackageProjectUrl>https://github.com/IT-rolling-out/IRO.Mvc/tree/master/src/Mvc/IRO.Mvc.MvcExceptionHandler</PackageProjectUrl>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.App" Version="2.2.0-preview3-35497" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.0-preview3-35497" />
-    <PackageReference Include="IRO.Reflection.Core" Version="1.0.3-alpha" />
+    <PackageReference Include="Microsoft.AspNetCore.App" Version="$(AspNetMvcVersion)" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="$(AspNetMvcVersion)" />
+    <PackageReference Include="IRO.Reflection.Core" Version="$(AsmVersion_Reflection)" />
   </ItemGroup>
 
   <ItemGroup>

@@ -41,6 +41,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "scripts", "scripts", "{BF3E
 		scripts\rename_files.cmd = scripts\rename_files.cmd
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IRO.Tests.ExceptionHandlerTest", "tests\IRO.Tests.ExceptionHandlerTest\IRO.Tests.ExceptionHandlerTest.csproj", "{0E601367-ED72-40DB-A786-6D42F9C5D40C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -79,6 +81,10 @@ Global
 		{E23A72A6-7970-4484-A32C-22EC4ABA7882}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E23A72A6-7970-4484-A32C-22EC4ABA7882}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E23A72A6-7970-4484-A32C-22EC4ABA7882}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0E601367-ED72-40DB-A786-6D42F9C5D40C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0E601367-ED72-40DB-A786-6D42F9C5D40C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0E601367-ED72-40DB-A786-6D42F9C5D40C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0E601367-ED72-40DB-A786-6D42F9C5D40C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -93,6 +99,7 @@ Global
 		{8683C09F-1DD0-4E45-A14C-6A74C026EBB0} = {EC7ADBF5-A8E5-4F4C-987E-1AF49156EACB}
 		{E23A72A6-7970-4484-A32C-22EC4ABA7882} = {EC7ADBF5-A8E5-4F4C-987E-1AF49156EACB}
 		{BF3E8F4E-C26A-45F1-A53B-36C7AC98D0E2} = {645B685D-30B9-41AE-A709-35A4F5231558}
+		{0E601367-ED72-40DB-A786-6D42F9C5D40C} = {78FAC66F-3AC1-489E-9D43-A25CD0C27FC1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {FA15EAC1-7737-46A9-9AE6-6D25A5CD34E0}

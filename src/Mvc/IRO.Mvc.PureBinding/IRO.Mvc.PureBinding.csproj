@@ -3,12 +3,15 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <Version>$(AsmVersion_Mvc)</Version>
-    <Description>Свой биндер моделей для методов в контроллерах. Позволяет получать</Description>
+    <Description>Alternative model binder for asp.net mvc. Same to [FromBody], but can take several parameters.
+
+Allow you not to create a model for each method, where you need to two or more parameters.</Description>
+    <PackageProjectUrl>https://github.com/IT-rolling-out/IRO.Mvc/tree/master/src/Mvc/IRO.Mvc.PureBinding</PackageProjectUrl>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.App" Version="2.2.0-preview3-35497" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.0-preview3-35497" />
+    <PackageReference Include="Microsoft.AspNetCore.App" Version="$(AspNetMvcVersion)" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="$(AspNetMvcVersion)" />
   </ItemGroup>
 
   <ItemGroup>

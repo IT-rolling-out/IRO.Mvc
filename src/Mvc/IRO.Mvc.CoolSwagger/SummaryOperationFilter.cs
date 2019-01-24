@@ -12,8 +12,7 @@ namespace IRO.Mvc.CoolSwagger
             try
             {
                 var xml = DocsParser.XmlFromMethod(context.MethodInfo);
-                string summaryText =
-                    DocsParserExtensions.XmlSummaryToString(xml);
+                string summaryText = DocsParserExtensions.XmlSummaryToString(xml);
                 if (!string.IsNullOrWhiteSpace(summaryText))
                     operation.Summary = summaryText;
                 summaryText += ".\n" + DocsParserExtensions.GetParamsText(xml);

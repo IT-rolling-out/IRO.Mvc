@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
-using IRO.Tests.SwashbuckleTest.Exceptions;
+using IRO.Tests.ExceptionHandlerTest.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 
-namespace IRO.Tests.SwashbuckleTest.Controllers
+namespace IRO.Tests.ExceptionHandlerTest.Controllers
 {
     [Route("err/[action]")]
     [ApiController]
