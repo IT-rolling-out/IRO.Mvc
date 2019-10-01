@@ -111,7 +111,7 @@ One rule - call it after `app.UseDeveloperExceptionPage();` or DeveloperExceptio
                     //By exception, default ErrorKey and http code.
                     builder.Register<NullReferenceException>();
 
-                    //Альтернативный способ регистрации.
+                    //Alternative registration method.
                     builder.Register((ErrorInfo) new ErrorInfo()
                     {
                         ErrorKey = "MyError",

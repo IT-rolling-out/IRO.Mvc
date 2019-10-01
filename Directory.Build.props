@@ -4,10 +4,10 @@
     <IsTest>false</IsTest>
     <IsNuPackage>false</IsNuPackage>
   </PropertyGroup>
-  <PropertyGroup Condition = "($(MSBuildProjectName.StartsWith('IRO.SlnTests')) Or $(MSBuildProjectName.StartsWith('IRO.SlnUnitTests')))">
+  <PropertyGroup Condition = "($(MSBuildProjectName.StartsWith('IRO.Tests')) Or $(MSBuildProjectName.StartsWith('IRO.UnitTests')))">
     <IsTest>true</IsTest>
   </PropertyGroup>
-  <PropertyGroup  Condition = "$(MSBuildProjectName.StartsWith('IRO.')) And !$(IsTest)" >
+  <PropertyGroup  Condition = "!$(IsTest)" >
     <IsNuPackage>true</IsNuPackage>
   </PropertyGroup>
 
@@ -36,7 +36,7 @@
     <AsmVersion_Storage>2.2.5$(VersionPostfix)</AsmVersion_Storage>
 	<!--/// Versions for remote nuget libs management.-->
 	
-    <AsmVersion_Mvc>1.0.8$(VersionPostfix)</AsmVersion_Mvc>
+    <AsmVersion_Mvc>1.0.9$(VersionPostfix)</AsmVersion_Mvc>
   </PropertyGroup>
 
   <PropertyGroup>

@@ -58,11 +58,12 @@ namespace IRO.Tests.ExceptionHandlerTest
         {
             app.UseMvcExceptionHandler((s) =>
             {
-                s.ErrorDescriptionUrlHandler = new FormattedErrorDescriptionUrlHandler("https://iro.com/errors/{0}");
+                s.ErrorDescriptionUrlHandler = new FormattedErrorDescriptionUrlHandler("http://localhost:5001/errors/{0}");
                 s.IsDebug = isDebug;
                 s.DefaultHttpCode = 500;
                 s.InnerExceptionsResolver = InnerExceptionsResolvers.InspectAggregateException;
                 s.CanBindByHttpCode = true;
+                s.Host = "https://localhost:5001";
                 s.JsonSerializerSettings.Formatting = Formatting.Indented;
                 s.OwnExceptionsHandler += (ex) =>
                 {
