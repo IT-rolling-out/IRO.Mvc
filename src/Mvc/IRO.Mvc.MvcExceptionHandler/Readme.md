@@ -89,7 +89,7 @@ One rule - call it after `app.UseDeveloperExceptionPage();` or DeveloperExceptio
                     return false;
                 };
 
-				//Register all exceptions.
+                //Register all exceptions.
                 s.Mapping((builder) =>
                 {
                     //By http code: with http code will be returned errorKey.
