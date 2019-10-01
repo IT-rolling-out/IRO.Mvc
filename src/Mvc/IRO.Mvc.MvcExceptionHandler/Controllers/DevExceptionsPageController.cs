@@ -27,8 +27,8 @@ namespace IRO.Mvc.MvcExceptionHandler.Controllers
         static readonly IDictionary<string, Tuple<Exception, HttpContext>> _exceptionsDict
             = new ConcurrentDictionary<string, Tuple<Exception, HttpContext>>();
 
-        static readonly IDictionary<string, HttpResponseCopy> _cachedPages
-           = new ConcurrentDictionary<string, HttpResponseCopy>();
+        static readonly IDictionary<string, string> _cachedPages
+           = new ConcurrentDictionary<string, string>();
 
         IHostingEnvironment _hostingEnvironment;
 
@@ -45,47 +45,50 @@ namespace IRO.Mvc.MvcExceptionHandler.Controllers
         {
             try
             {
-                bool finished = false;
                 if (_cachedPages.TryGetValue(id, out var cachedPage))
                 {
-                    await cachedPage.WriteToHttpResponse(Response);
-                    finished = true;
+                    //?Return html from cache.
+                    await Response.WriteAsync(cachedPage);
+                    return;
                 }
-                else if(!string.IsNullOrWhiteSpace(HostAddress))
+                else if (!string.IsNullOrWhiteSpace(HostAddress) && false)
                 {
-                    var urlToRequest = HostAddress + $"/DevExceptionsPage/{id}";
-                    var req=WebRequest.Create(urlToRequest);
-                    string httpResponseText = "";
-                    using (var stream = req.GetResponse().GetResponseStream())
+                    //?Send request to get full html and return what needed.
+                    var urlToRequest = HostAddress + $"/DevExceptionsPage/NoCache/{id}";
+                    var req = WebRequest.Create(urlToRequest);
+                    var resp = req.GetResponse();
+                    using (var stream = resp.GetResponseStream())
                     {
-                        httpResponseText=StreamHelpers.ReadAllTextFromStream(stream);
-                        if (httpResponseText.Length > 10)
+                        var responseBodyText = new StreamReader(stream).ReadToEnd();
+                        if (responseBodyText.Length > 10)
                         {
-
+                            //Save to cache.
+                            _cachedPages[id] = responseBodyText;
+                            await Response.WriteAsync(responseBodyText);
+                            return;
                         }
                     }
                 }
 
-                if (finished)
-                    return;
                 if (_exceptionsDict.ContainsKey(id))
                 {
+                    //?Execute middleware and save current response to cache.
                     var swapStream = new MemoryStream();
-                    HttpContext.Response.Body.Dispose();
+                    var originalResponseBody = HttpContext.Response.Body;
                     HttpContext.Response.Body = swapStream;
-
                     //Run middleware.
-                    await TryUseDevExceptionPageMiddleware(id);
+                    await UseDevExceptionPageMiddleware(id);
 
                     //Read stream.
                     swapStream.Seek(0, SeekOrigin.Begin);
-                    string responseBody = new StreamReader(swapStream).ReadToEnd();
+                    var responseBodyText = new StreamReader(swapStream).ReadToEnd();
                     swapStream.Seek(0, SeekOrigin.Begin);
 
                     //Save to cache.
-                    var newCachedPage = HttpResponseCopy.FromHttpResponse(HttpContext.Response, responseBody);
-                    _cachedPages[id] = newCachedPage;
-                    await Response.WriteAsync(responseBody);
+                    await swapStream.CopyToAsync(originalResponseBody);
+                    HttpContext.Response.Body = originalResponseBody;
+                    _cachedPages[id] = responseBodyText;
+                    await Response.WriteAsync(responseBodyText);
                 }
                 else
                 {
@@ -103,45 +106,39 @@ namespace IRO.Mvc.MvcExceptionHandler.Controllers
             }
         }
 
-        [Route("/NoCache/{id}")]
+        [Route("NoCache/{id}")]
         [HttpGet]
         public async Task OpenWithoutCache(string id)
         {
-            if (!await TryUseDevExceptionPageMiddleware(id))
+            if (!await UseDevExceptionPageMiddleware(id))
             {
                 await Response.WriteAsync(
                        "Can't resolve exception.");
             }
         }
 
-        async Task<bool> TryUseDevExceptionPageMiddleware(string id)
+        async Task<bool> UseDevExceptionPageMiddleware(string id)
         {
-            try
+            if (_exceptionsDict.TryGetValue(id, out var data))
             {
-                if (_exceptionsDict.TryGetValue(id, out var data))
+                //Run middleware.
+                RequestDelegate next = async (ctx) =>
                 {
-                    //Run middleware.
-                    RequestDelegate next = async (ctx) =>
-                    {
-                        var exceptionDispatchInfo = ExceptionDispatchInfo.Capture(data.Item1);
-                        exceptionDispatchInfo.Throw();
-                    };
-                    var loggerFactory = new LoggerFactory();
-                    var opt = new DeveloperExceptionPageOptions();
-                    var diagnosticSource = new DiagnosticListener("");
-                    var developerExceptionPageMiddleware = new DeveloperExceptionPageMiddleware(
-                        next,
-                        Options.Create(opt),
-                        loggerFactory,
-                        _hostingEnvironment,
-                        diagnosticSource
-                    );
-                    await developerExceptionPageMiddleware.Invoke(data.Item2);
-                    return true;
-                }
-            }
-            catch
-            {
+                    var exceptionDispatchInfo = ExceptionDispatchInfo.Capture(data.Item1);
+                    exceptionDispatchInfo.Throw();
+                };
+                var loggerFactory = new LoggerFactory();
+                var opt = new DeveloperExceptionPageOptions();
+                var diagnosticSource = new DiagnosticListener("");
+                var developerExceptionPageMiddleware = new DeveloperExceptionPageMiddleware(
+                    next,
+                    Options.Create(opt),
+                    loggerFactory,
+                    _hostingEnvironment,
+                    diagnosticSource
+                );
+                await developerExceptionPageMiddleware.Invoke(data.Item2);
+                return true;
             }
             return false;
         }
