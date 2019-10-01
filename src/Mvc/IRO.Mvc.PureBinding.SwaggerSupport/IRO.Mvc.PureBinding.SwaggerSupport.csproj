@@ -9,7 +9,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="$(AspNetMvcVersion)" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="$(AspNetMvcVersion)" />
-    <PackageReference Include="IRO.Reflection.CodeGen" Version="$(AsmVersion_Reflection)"/>
+    <PackageReference Include="IRO.Reflection.CodeGen" Version="1.1.0"/>
   </ItemGroup>
 
   <ItemGroup>

@@ -3,6 +3,7 @@ using IRO.Common.Collections;
 using IRO.Mvc;
 using IRO.Mvc.MvcExceptionHandler.Models;
 using System;
+using System.Threading.Tasks;
 using IRO.Mvc.Core;
 using IRO.Mvc.MvcExceptionHandler.Controllers;
 
@@ -10,11 +11,13 @@ namespace IRO.Mvc.MvcExceptionHandler.Services
 {
     public class ResponseModelsFactory
     {
-        public string CreateDebugUrl(ErrorContext errorContext)
+        public async Task<string> CreateDebugUrl(ErrorContext errorContext)
         {
+            var ctx=errorContext.HttpContext;
+            var htmlText=await ctx.ExecuteDevExceptionPage(errorContext.OriginalException);
+
             var methodPath = "DevExceptionsPage/" + DevExceptionsPageController.AddException(
-                errorContext.OriginalException,
-                errorContext.HttpContext
+                htmlText
                 );
             var host=errorContext.Configs.Host ?? "";
             if (!host.EndsWith("/"))
@@ -22,7 +25,7 @@ namespace IRO.Mvc.MvcExceptionHandler.Services
             return host + methodPath;
         }
 
-        public ErrorDTO CreateErrorData(ErrorContext errorContext)
+        public async Task<ErrorDTO> CreateErrorData(ErrorContext errorContext)
         {
             var errorInfo = errorContext.ErrorInfo;
             var err = new ErrorDTO();
@@ -37,7 +40,7 @@ namespace IRO.Mvc.MvcExceptionHandler.Services
                     err.StackTrace = errorContext.OriginalException.ToString();
                     try
                     {
-                        err.DebugUrl = CreateDebugUrl(errorContext);
+                        err.DebugUrl = await CreateDebugUrl(errorContext);
                     }
                     catch { }
                 }

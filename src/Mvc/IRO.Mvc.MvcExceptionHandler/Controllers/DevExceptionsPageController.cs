@@ -24,20 +24,7 @@ namespace IRO.Mvc.MvcExceptionHandler.Controllers
     [ApiController]
     public class DevExceptionsPageController : ControllerBase
     {
-        static readonly IDictionary<string, Tuple<Exception, HttpContext>> _exceptionsDict
-            = new ConcurrentDictionary<string, Tuple<Exception, HttpContext>>();
-
-        static readonly IDictionary<string, string> _cachedPages
-           = new ConcurrentDictionary<string, string>();
-
-        IHostingEnvironment _hostingEnvironment;
-
-        string HostAddress { get; set; } = "https://localhost:5001";
-
-        public DevExceptionsPageController(IHostingEnvironment hostingEnvironment)
-        {
-            _hostingEnvironment = hostingEnvironment;
-        }
+        static readonly IDictionary<string, string> _cachedPages = new ConcurrentDictionary<string, string>();
 
         [Route("{id}")]
         [HttpGet]
@@ -49,46 +36,6 @@ namespace IRO.Mvc.MvcExceptionHandler.Controllers
                 {
                     //?Return html from cache.
                     await Response.WriteAsync(cachedPage);
-                    return;
-                }
-                else if (!string.IsNullOrWhiteSpace(HostAddress) && false)
-                {
-                    //?Send request to get full html and return what needed.
-                    var urlToRequest = HostAddress + $"/DevExceptionsPage/NoCache/{id}";
-                    var req = WebRequest.Create(urlToRequest);
-                    var resp = req.GetResponse();
-                    using (var stream = resp.GetResponseStream())
-                    {
-                        var responseBodyText = new StreamReader(stream).ReadToEnd();
-                        if (responseBodyText.Length > 10)
-                        {
-                            //Save to cache.
-                            _cachedPages[id] = responseBodyText;
-                            await Response.WriteAsync(responseBodyText);
-                            return;
-                        }
-                    }
-                }
-
-                if (_exceptionsDict.ContainsKey(id))
-                {
-                    //?Execute middleware and save current response to cache.
-                    var swapStream = new MemoryStream();
-                    var originalResponseBody = HttpContext.Response.Body;
-                    HttpContext.Response.Body = swapStream;
-                    //Run middleware.
-                    await UseDevExceptionPageMiddleware(id);
-
-                    //Read stream.
-                    swapStream.Seek(0, SeekOrigin.Begin);
-                    var responseBodyText = new StreamReader(swapStream).ReadToEnd();
-                    swapStream.Seek(0, SeekOrigin.Begin);
-
-                    //Save to cache.
-                    await swapStream.CopyToAsync(originalResponseBody);
-                    HttpContext.Response.Body = originalResponseBody;
-                    _cachedPages[id] = responseBodyText;
-                    await Response.WriteAsync(responseBodyText);
                 }
                 else
                 {
@@ -105,43 +52,7 @@ namespace IRO.Mvc.MvcExceptionHandler.Controllers
                        );
             }
         }
-
-        [Route("NoCache/{id}")]
-        [HttpGet]
-        public async Task OpenWithoutCache(string id)
-        {
-            if (!await UseDevExceptionPageMiddleware(id))
-            {
-                await Response.WriteAsync(
-                       "Can't resolve exception.");
-            }
-        }
-
-        async Task<bool> UseDevExceptionPageMiddleware(string id)
-        {
-            if (_exceptionsDict.TryGetValue(id, out var data))
-            {
-                //Run middleware.
-                RequestDelegate next = async (ctx) =>
-                {
-                    var exceptionDispatchInfo = ExceptionDispatchInfo.Capture(data.Item1);
-                    exceptionDispatchInfo.Throw();
-                };
-                var loggerFactory = new LoggerFactory();
-                var opt = new DeveloperExceptionPageOptions();
-                var diagnosticSource = new DiagnosticListener("");
-                var developerExceptionPageMiddleware = new DeveloperExceptionPageMiddleware(
-                    next,
-                    Options.Create(opt),
-                    loggerFactory,
-                    _hostingEnvironment,
-                    diagnosticSource
-                );
-                await developerExceptionPageMiddleware.Invoke(data.Item2);
-                return true;
-            }
-            return false;
-        }
+        
 
         /// <summary>
         /// Return id of page where you can open exception.
@@ -149,18 +60,14 @@ namespace IRO.Mvc.MvcExceptionHandler.Controllers
         /// </summary>
         /// <param name="exception"></param>
         /// <returns></returns>
-        public static string AddException(Exception exception, HttpContext httpContext)
+        public static string AddException(string htmlText)
         {
-            if (_exceptionsDict.Count > 200)
+            if (_cachedPages.Count > 1000)
             {
-                _exceptionsDict.Clear();
+                _cachedPages.Clear();
             }
             var id = TextExtensions.Generate(10);
-            var data = new Tuple<Exception, HttpContext>(
-                exception,
-                httpContext
-                );
-            _exceptionsDict.Add(id, data);
+            _cachedPages.Add(id, htmlText);
             return id;
         }
     }

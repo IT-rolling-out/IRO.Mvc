@@ -133,7 +133,7 @@ namespace IRO.Mvc.MvcExceptionHandler
                 throw new Exception("Error in FilterBeforeDTO.", ex);
             }
 
-            var errorDTO = errorContext.ResponseDTO = _responseModelsFactory.CreateErrorData(errorContext);
+            var errorDTO = errorContext.ResponseDTO =await _responseModelsFactory.CreateErrorData(errorContext);
 
             try
             {
