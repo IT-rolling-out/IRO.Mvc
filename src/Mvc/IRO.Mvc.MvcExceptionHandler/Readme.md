@@ -69,7 +69,7 @@ One rule - call it after `app.UseDeveloperExceptionPage();` or DeveloperExceptio
 ```csharp
             app.UseMvcExceptionHandler((s) =>
             {
-			    //Some configurations.
+                //Some configurations.
                 s.ErrorDescriptionUrlHandler = new FormattedErrorDescriptionUrlHandler("https://iro.com/errors/{0}");
                 s.IsDebug = isDebug;
                 s.DefaultHttpCode = 500;
