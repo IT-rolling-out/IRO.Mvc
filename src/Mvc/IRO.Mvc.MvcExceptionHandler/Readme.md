@@ -85,7 +85,7 @@ One rule - call it after `app.UseDeveloperExceptionPage();` or DeveloperExceptio
                 s.FilterBeforeDTO = async (errorContext) =>
                 {
                     //Custom error handling. Return true if MvcExceptionHandler must ignore current error,
-					//because it was handled.
+                    //because it was handled.
                     return false;
                 };
 
