@@ -10,7 +10,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="$(AspNetMvcVersion)" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Formatters.Json" Version="$(AspNetMvcVersion)" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.1-beta1" />
-    <PackageReference Include="IRO.Common" Version="$(AsmVersion_Common)" />
+    <PackageReference Include="IRO.Common" Version="1.3.0" />
   </ItemGroup>
 
 

@@ -1,9 +1,11 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using IRO.Tests.ExceptionHandlerTest.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace IRO.Tests.ExceptionHandlerTest.Controllers
 {
+
     [Route("err/[action]")]
     [ApiController]
     public class ErrorTestController : ControllerBase

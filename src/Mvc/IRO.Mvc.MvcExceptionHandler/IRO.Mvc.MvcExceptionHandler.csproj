@@ -11,7 +11,7 @@ Please look at an readme on github.</Description>
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" Version="$(AspNetMvcVersion)" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="$(AspNetMvcVersion)" />
-    <PackageReference Include="IRO.Reflection.Core" Version="$(AsmVersion_Reflection)" />
+    <PackageReference Include="IRO.Reflection.Core" Version="1.1.0" />
   </ItemGroup>
 
   <ItemGroup>
