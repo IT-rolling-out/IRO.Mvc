@@ -9,7 +9,8 @@ Please look at an readme on github.</Description>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.App" Version="$(AspNetMvcVersion)" />
+    <PackageReference Include="Microsoft.AspNetCore.Http" Version="$(AspNetMvcVersion)" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="$(AspNetMvcVersion)" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="$(AspNetMvcVersion)" />
     <PackageReference Include="IRO.Reflection.Core" Version="1.1.0" />
   </ItemGroup>

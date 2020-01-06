@@ -23,11 +23,8 @@
   <PropertyGroup>
     <!-- Use current same version for all or define special for category. -->
     <VersionPostfix></VersionPostfix>
-
-    <!-- Versions for remote nuget libs management. ///-->
-    <DefaultAsmVersion>1.0.7$(VersionPostfix)</DefaultAsmVersion>
 	
-    <AsmVersion_Mvc>1.1.3$(VersionPostfix)</AsmVersion_Mvc>
+    <AsmVersion_Mvc>1.1.4$(VersionPostfix)</AsmVersion_Mvc>
   </PropertyGroup>
 
   <PropertyGroup>
