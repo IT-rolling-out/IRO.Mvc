@@ -64,6 +64,12 @@ Current function can be disabled too.
 
 # Usage example
 
+First, add services^
+
+```csharp
+        services.AddMvcExceptionHandler();
+```
+
 One rule - call it after `app.UseDeveloperExceptionPage();` or DeveloperExceptionPage will not work.
 
 ```csharp

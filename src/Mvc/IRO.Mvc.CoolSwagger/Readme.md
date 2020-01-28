@@ -12,19 +12,9 @@ What it add:
 ```csharp
             services.AddSwaggerGen(opt =>
             {
-                opt.SwaggerDocAdditional(doc =>
-                {
-                    doc.Schemes = new List<string>
-                    {
-                        "http",
-                        "https"
-                    };
-                });
-
                 opt.UseCoolSummaryGen();
                 opt.UseDefaultIdentityAuthScheme();
                 opt.AddSwaggerTagNameOperationFilter();
 
-                opt.AddPureBindingToSwashbuckle();
             });
 ```
