@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using IRO.Mvc.MvcExceptionHandler.Models;
 using IRO.Mvc.MvcExceptionHandler.Services;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
 namespace IRO.Mvc.MvcExceptionHandler
@@ -14,11 +15,14 @@ namespace IRO.Mvc.MvcExceptionHandler
         readonly IExceptionHandlerConfigs _configs;
         readonly MvcExceptionHandlerSetup _setup;
         readonly IErrorInfoResolver _errorInfoResolver;
-        readonly ResponseModelsFactory _responseModelsFactory = new ResponseModelsFactory();
+        readonly ResponseModelsFactory _responseModelsFactory;
         readonly JsonSerializerSettings _jsonSerializerSettings;
+        readonly ILogger _logger;
 
-        public ExHandlerMiddleware(Action<MvcExceptionHandlerSetup> setupAction)
+        public ExHandlerMiddleware(Action<MvcExceptionHandlerSetup> setupAction, ResponseModelsFactory responseModelsFactory, ILogger<ExHandlerMiddleware> logger)
         {
+            _responseModelsFactory = responseModelsFactory;
+            _logger = logger;
             _setup = new MvcExceptionHandlerSetup();
             setupAction(_setup);
             _configs = _setup.CreateConfigs();
@@ -30,17 +34,16 @@ namespace IRO.Mvc.MvcExceptionHandler
                 );
             _setup.ActionToRegisterExceptions(erroInfoRegistry);
             _errorInfoResolver = erroInfoRegistry.Build();
-            _jsonSerializerSettings=_setup.JsonSerializerSettings;
+            _jsonSerializerSettings = _setup.JsonSerializerSettings;
         }
 
         public async Task RequestProcessing(HttpContext httpContext, Func<Task> next)
         {
-            
             ErrorInfo? errorInfo = null;
             Exception exception = null;
             Exception innerException = null;
             bool exceptionProcessedHere;
-            ExceptionDispatchInfo exceptionDispatchInfo=null;
+            ExceptionDispatchInfo exceptionDispatchInfo = null;
 
             try
             {
@@ -49,8 +52,8 @@ namespace IRO.Mvc.MvcExceptionHandler
             }
             catch (Exception ex)
             {
-                exception = ex;     
-                exceptionDispatchInfo=ExceptionDispatchInfo.Capture(exception);
+                exception = ex;
+                exceptionDispatchInfo = ExceptionDispatchInfo.Capture(exception);
             }
 
             try
@@ -58,7 +61,7 @@ namespace IRO.Mvc.MvcExceptionHandler
                 //Error by inner exception.  
                 if (exception != null)
                 {
-                    
+
                     innerException = _configs.InnerExceptionsResolver(exception);
                     errorInfo = _errorInfoResolver.TryGetByException(innerException.GetType());
                 }
@@ -70,7 +73,7 @@ namespace IRO.Mvc.MvcExceptionHandler
                     if (bodyHasContent)
                         return;
                     var httpCode = httpContext.Response.StatusCode;
-                    errorInfo = _errorInfoResolver.TryGetByHttCode(httpCode);                   
+                    errorInfo = _errorInfoResolver.TryGetByHttCode(httpCode);
                 }
 
                 if (errorInfo == null)
@@ -85,19 +88,19 @@ namespace IRO.Mvc.MvcExceptionHandler
                         exception,
                         innerException
                         );
-                    exceptionProcessedHere = true;                   
+                    exceptionProcessedHere = true;
                 }
             }
             catch (Exception ex)
             {
                 //If exception in current middleware.
-                var ownException= new ErrorHandlerException(ExText, ex);
+                var ownException = new ErrorHandlerException(ExText, ex);
                 _setup.OwnExceptionsHandler?.Invoke(ownException);
                 throw ownException;
             }
 
             //Give it to else middleware.
-            if(!exceptionProcessedHere && exception != null)
+            if (!exceptionProcessedHere && exception != null)
             {
                 exceptionDispatchInfo.Throw();
             }
@@ -118,7 +121,7 @@ namespace IRO.Mvc.MvcExceptionHandler
                 InnerException = innerException,
                 OriginalException = exception
             };
-            
+
             try
             {
                 if (_setup.FilterBeforeDTO != null)
@@ -133,7 +136,7 @@ namespace IRO.Mvc.MvcExceptionHandler
                 throw new Exception("Error in FilterBeforeDTO.", ex);
             }
 
-            var errorDTO = errorContext.ResponseDTO =await _responseModelsFactory.CreateErrorData(errorContext);
+            var errorDTO = errorContext.ResponseDTO = await _responseModelsFactory.CreateErrorData(errorContext);
 
             try
             {
@@ -144,18 +147,18 @@ namespace IRO.Mvc.MvcExceptionHandler
                         return;
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw new Exception("Error in FilterAfterDTO.", ex);
-            }            
+            }
 
             var jsonResponse = JsonConvert.SerializeObject(errorDTO, _jsonSerializerSettings);
             httpContext.Response.StatusCode = errorContext.ErrorInfo.HttpCode ?? 500;
             httpContext.Response.ContentType = "application/json";
-            
+
             await httpContext.Response.WriteAsync(jsonResponse);
         }
 
-        
+
     }
 }

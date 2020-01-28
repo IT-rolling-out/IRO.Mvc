@@ -5,22 +5,23 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Microsoft.OpenApi.Models;
 
 namespace IRO.Mvc.CoolSwagger
 {
     /// <summary>
     /// Наход методы, которые требуют авторизации и записывает это в swagger.json .
     /// </summary>
-    public class IdentityAuthOperationFilter: IOperationFilter
+    public class IdentityAuthOperationFilter : IOperationFilter
     {
         string _securityDefinitionName;
-        IEnumerable<string> _scopes;
+        IList<string> _scopes;
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="scopes">Достаточно одной строки, не важно что там будет.</param>
-        public IdentityAuthOperationFilter(IEnumerable<string> scopes, string securityDefinitionName)
+        public IdentityAuthOperationFilter(IList<string> scopes, string securityDefinitionName)
         {
             //if (scopes == null || !scopes.Any())
             //{
@@ -30,26 +31,31 @@ namespace IRO.Mvc.CoolSwagger
             _securityDefinitionName = securityDefinitionName;
         }
 
-        public void Apply(Operation operation, OperationFilterContext context)
+        public void Apply(OpenApiOperation operation, OperationFilterContext context)
         {
             try
             {
                 if (!CheckNeedIdentityAuth(context.MethodInfo))
                     return;
 
-                operation.Responses.Add("401", new Response { Description = "Unauthorized" });
-                operation.Responses.Add("403", new Response { Description = "Forbidden" });
+                operation.Responses.Add("401", new OpenApiResponse { Description = "Unauthorized" });
+                operation.Responses.Add("403", new OpenApiResponse { Description = "Forbidden" });
 
-                operation.Security = new List<IDictionary<string, IEnumerable<string>>>
-                {
-                    new Dictionary<string, IEnumerable<string>>
+                var openApiSecurityRequirement = new OpenApiSecurityRequirement();
+                openApiSecurityRequirement.Add(
+                    new OpenApiSecurityScheme()
                     {
-                        { _securityDefinitionName, _scopes }
-                    }
+                        Name = _securityDefinitionName
+                    },
+                    _scopes
+                    );
+                operation.Security = new List<OpenApiSecurityRequirement>
+                {
+                    openApiSecurityRequirement
                 };
             }
-            catch { }          
-        }       
+            catch { }
+        }
 
         bool CheckNeedIdentityAuth(MethodInfo methodInfo)
         {

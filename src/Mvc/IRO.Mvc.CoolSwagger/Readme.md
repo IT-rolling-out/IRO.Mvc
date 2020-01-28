@@ -21,7 +21,6 @@ What it add:
                     };
                 });
 
-                //opt.IncludeAllAvailableXmlComments();
                 opt.UseCoolSummaryGen();
                 opt.UseDefaultIdentityAuthScheme();
                 opt.AddSwaggerTagNameOperationFilter();

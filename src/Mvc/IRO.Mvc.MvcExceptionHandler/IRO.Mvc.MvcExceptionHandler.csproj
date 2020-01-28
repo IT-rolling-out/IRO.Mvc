@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <Version>$(AsmVersion_Mvc)</Version>
     <Description>Flexible library that allow you to easy handle all asp.net exceptions (and HTTP error codes too).
 Please look at an readme on github.</Description>
@@ -9,20 +9,12 @@ Please look at an readme on github.</Description>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Http" Version="$(AspNetMvcVersion)" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="$(AspNetMvcVersion)" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="$(AspNetMvcVersion)" />
     <PackageReference Include="IRO.Reflection.Core" Version="1.1.0" />
+    <PackageReference Include="Microsoft.AspNetCore.App" Version="2.2.8" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\IRO.Mvc.Core\IRO.Mvc.Core.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>Newtonsoft.Json</HintPath>
-    </Reference>
   </ItemGroup>
 
   <ItemGroup>

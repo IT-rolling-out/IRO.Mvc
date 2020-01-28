@@ -38,13 +38,14 @@ namespace IRO.Mvc.MvcExceptionHandler
                 var loggerFactory = new LoggerFactory();
                 var opt = new DeveloperExceptionPageOptions();
                 var diagnosticSource = new DiagnosticListener("");
-                var hostingEnvironment = currentHttpContext.RequestServices.GetRequiredService<IHostingEnvironment>();
+                var hostingEnvironment = currentHttpContext.RequestServices.GetRequiredService<IWebHostEnvironment>();
                 var developerExceptionPageMiddleware = new DeveloperExceptionPageMiddleware(
                     next,
-                    Options.Create(opt),
+                    Options.Create<DeveloperExceptionPageOptions>(opt),
                     loggerFactory,
                     hostingEnvironment,
-                    diagnosticSource
+                    diagnosticSource,
+                    new List<IDeveloperPageExceptionFilter>()
                 );
                 await developerExceptionPageMiddleware.Invoke(originalHttpContext);
 

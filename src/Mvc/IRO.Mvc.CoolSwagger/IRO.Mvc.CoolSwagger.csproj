@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <Version>$(AsmVersion_Mvc)</Version>
     <Description>CoolSwagger - some extensions for Swashbuckle (tool to generate swagger.json from controllers).
 
@@ -16,11 +16,10 @@ What it add:
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="4.0.1" />
-    <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="4.0.1" />
-    <PackageReference Include="Swashbuckle.AspNetCore.Filters" Version="4.5.2" />
     <PackageReference Include="IRO.FileIO.ImprovedFileOperations" Version="1.0.7" />
     <PackageReference Include="IRO.Reflection.SummarySearch" Version="1.1.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="5.0.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="5.0.0" />
   </ItemGroup>
 
   <ItemGroup>

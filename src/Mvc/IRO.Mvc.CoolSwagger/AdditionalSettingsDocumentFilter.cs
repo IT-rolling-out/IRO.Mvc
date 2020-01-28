@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
@@ -6,16 +7,17 @@ namespace IRO.Mvc.CoolSwagger
 {
     class AdditionalSettingsDocumentFilter : IDocumentFilter
     {
-        Action<SwaggerDocument> _action;
+        Action<OpenApiDocument> _action;
 
-        public AdditionalSettingsDocumentFilter(Action<SwaggerDocument> action)
+        public AdditionalSettingsDocumentFilter(Action<OpenApiDocument> action)
         {
             _action = action;
         }
 
-        public void Apply(SwaggerDocument swaggerDoc, DocumentFilterContext context)
+        public void Apply(OpenApiDocument swaggerDoc, DocumentFilterContext context)
         {
             _action(swaggerDoc);
         }
+
     }
 }

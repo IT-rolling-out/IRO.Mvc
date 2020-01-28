@@ -6,20 +6,28 @@ using System;
 using System.Threading.Tasks;
 using IRO.Mvc.Core;
 using IRO.Mvc.MvcExceptionHandler.Controllers;
+using Microsoft.Extensions.Logging;
 
 namespace IRO.Mvc.MvcExceptionHandler.Services
 {
     public class ResponseModelsFactory
     {
+        readonly ILogger _logger;
+
+        public ResponseModelsFactory(ILogger<ResponseModelsFactory> logger)
+        {
+            _logger = logger;
+        }
+
         public async Task<string> CreateDebugUrl(ErrorContext errorContext)
         {
-            var ctx=errorContext.HttpContext;
-            var htmlText=await ctx.ExecuteDevExceptionPage(errorContext.OriginalException);
+            var ctx = errorContext.HttpContext;
+            var htmlText = await ctx.ExecuteDevExceptionPage(errorContext.OriginalException);
 
             var methodPath = "DevExceptionsPage/" + DevExceptionsPageController.AddException(
                 htmlText
                 );
-            var host=errorContext.Configs.Host ?? "";
+            var host = errorContext.Configs.Host ?? "";
             if (!host.EndsWith("/"))
                 host += "/";
             return host + methodPath;
@@ -42,9 +50,12 @@ namespace IRO.Mvc.MvcExceptionHandler.Services
                     {
                         err.DebugUrl = await CreateDebugUrl(errorContext);
                     }
-                    catch { }
+                    catch(Exception ex)
+                    {
+                        _logger.LogError("Error resolving dev exception page message.\n{0}", ex);
+                    }
                 }
-                err.RequestInfo = CreateRequestInfo(errorContext.HttpContext);                
+                err.RequestInfo = CreateRequestInfo(errorContext.HttpContext);
             }
             return err;
         }
@@ -93,7 +104,7 @@ namespace IRO.Mvc.MvcExceptionHandler.Services
             catch { }
 
             requestInfo.RequestPath = req.Path;
-            requestInfo.ContentType = req.ContentType;           
+            requestInfo.ContentType = req.ContentType;
             return requestInfo;
         }
     }

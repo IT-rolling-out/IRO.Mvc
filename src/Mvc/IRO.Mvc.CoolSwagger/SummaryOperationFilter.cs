@@ -1,4 +1,5 @@
 ﻿using IRO.Reflection.SummarySearch;
+using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
@@ -7,7 +8,7 @@ namespace IRO.Mvc.CoolSwagger
 
     public class SummaryOperationFilter : IOperationFilter
     {
-        public void Apply(Operation operation, OperationFilterContext context)
+        public void Apply(OpenApiOperation operation, OperationFilterContext context)
         {
             try
             {
