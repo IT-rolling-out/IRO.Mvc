@@ -5,14 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="5.0.0" />
-    <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="5.0.0" />
-    <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="5.0.0" />
-    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="5.0.0" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\..\src\Mvc\IRO.Mvc.CoolSwagger\IRO.Mvc.CoolSwagger.csproj" />
+    <ProjectReference Include="..\..\src\Mvc\IRO.Mvc.MvcExceptionHandler\IRO.Mvc.MvcExceptionHandler.csproj" />
   </ItemGroup>
 
 

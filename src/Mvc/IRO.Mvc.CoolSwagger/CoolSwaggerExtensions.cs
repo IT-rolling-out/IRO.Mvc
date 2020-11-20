@@ -40,9 +40,19 @@ namespace IRO.Mvc.CoolSwagger
             });
         }
 
+        /// <summary>
+        /// Add following response types to all methods.
+        /// </summary>
+        /// <param name="opt"></param>
+        public static void AddDefaultResponses(this SwaggerGenOptions opt, params ResponseDescription[] responses)
+        {
+            opt.OperationFilter<DefaultResponsesOperationFilter>((object)responses);
+        }
+
         public static void SwaggerDocAdditional(this SwaggerGenOptions opt, Action<OpenApiDocument> action)
         {
             opt.DocumentFilter<AdditionalSettingsDocumentFilter>(action);
         }
+
     }
 }

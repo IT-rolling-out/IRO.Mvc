@@ -18,7 +18,9 @@ What it add:
   <ItemGroup>
     <PackageReference Include="IRO.FileIO.ImprovedFileOperations" Version="1.0.7" />
     <PackageReference Include="IRO.Reflection.SummarySearch" Version="1.1.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="5.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="5.0.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="5.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="5.0.0" />
   </ItemGroup>
 

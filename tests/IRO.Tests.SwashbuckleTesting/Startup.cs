@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using IRO.Mvc.CoolSwagger;
+using IRO.Tests.SwashbuckleTesting.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -83,6 +84,13 @@ namespace IRO.Tests.SwashbuckleTesting
                 opt.UseCoolSummaryGen();
                 opt.UseDefaultIdentityAuthScheme();
                 opt.AddSwaggerTagNameOperationFilter();
+                opt.AddDefaultResponses(
+                    new ResponseDescription()
+                    {
+                        StatusCode = 500,
+                        Description = "Server error.",
+                        Type = typeof(ServerErrorDto)
+                    });
             });
         }
     }
