@@ -71,35 +71,4 @@ namespace IRO.Mvc.CoolSwagger
             return controllerNeedAuth;
         }
     }
-
-
-    public class DefaultResponsesOperationFilter : IOperationFilter
-    {
-        readonly IEnumerable<ResponseDescription> _responses;
-
-        public DefaultResponsesOperationFilter(IEnumerable<ResponseDescription> responses)
-        {
-            _responses = responses;
-        }
-
-        public void Apply(OpenApiOperation operation, OperationFilterContext context)
-        {
-            foreach (var resp in _responses)
-            {
-                context.SchemaGenerator.GenerateSchema(resp.Type, context.SchemaRepository);
-                context.SchemaRepository.TryGetIdFor(resp.Type, out var id);
-                var scheme = context.SchemaRepository.Schemas[id];
-                var openApiResponse = new OpenApiResponse
-                {
-                    Description = resp.Description
-                };
-                openApiResponse.Content["application/json"] = new OpenApiMediaType()
-                {
-                    Schema = scheme
-                };
-                operation.Responses.Add(resp.StatusCode.ToString(), openApiResponse);
-            }
-
-        }
-    }
 }

@@ -1,5 +1,8 @@
 ﻿using System.Threading.Tasks;
+using IRO.Mvc.Core;
+using IRO.Mvc.Core.Dto;
 using IRO.Tests.ExceptionHandlerTesting.Exceptions;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace IRO.Tests.ExceptionHandlerTesting.Controllers
@@ -31,6 +34,13 @@ namespace IRO.Tests.ExceptionHandlerTesting.Controllers
                     throw new ClientException();
                 }).Wait();
             }).Wait();
+        }
+
+        [HttpPost]
+        public async Task<HttpContextInfo> TestGetBody()
+        {
+            await Response.WriteAsync("qqqqq");
+            return await HttpContext.ResolveInfo();
         }
     }
 }

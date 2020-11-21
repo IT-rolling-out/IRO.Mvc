@@ -55,12 +55,12 @@ namespace IRO.Mvc.MvcExceptionHandler.Services
                         _logger.LogError("Error resolving dev exception page message.\n{0}", ex);
                     }
                 }
-                err.RequestInfo = CreateRequestInfo(errorContext.HttpContext);
+                err.RequestInfo = await CreateRequestInfo(errorContext.HttpContext);
             }
             return err;
         }
 
-        public RequestInfoDTO CreateRequestInfo(HttpContext httpContext)
+        public async Task<RequestInfoDTO> CreateRequestInfo(HttpContext httpContext)
         {
             var requestInfo = new RequestInfoDTO();
             var req = httpContext.Request;
@@ -98,7 +98,7 @@ namespace IRO.Mvc.MvcExceptionHandler.Services
                 var lengthInKB = requestInfo.ContentLength / 1024;
                 if (lengthInKB <= 500)
                 {
-                    requestInfo.BodyText = httpContext.GetRequestBodyText();
+                    requestInfo.BodyText = await httpContext.GetRequestBodyText();
                 }
             }
             catch { }
