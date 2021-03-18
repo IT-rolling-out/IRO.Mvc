@@ -25,6 +25,8 @@ namespace IRO.Mvc.Core
         {
             
             _pathToLogs = "/" + pathToLogs;
+            _logService = app.ApplicationServices.GetService<IRequestsLoggingService>() ??
+                          new InMemoryRequestsLoggingService();
             AddHttpCallsLogs(app);
             app.Use(async (ctx, next) =>
             {
@@ -82,9 +84,6 @@ namespace IRO.Mvc.Core
                         if (!ctx.Request.Path.Value.StartsWith(_pathToLogs))
                         {
                             var info = await ctx.ResolveInfo();
-                            if (_logService == null)
-                                _logService = ctx.RequestServices.GetService<IRequestsLoggingService>() ??
-                                              new InMemoryRequestsLoggingService();
                             await _logService.SaveLogRecord(info);
                         }
                     }

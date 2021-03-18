@@ -23,7 +23,12 @@ namespace IRO.Mvc.Core
             dto.Request.Method = request.Method;
             try
             {
-                dto.Request.QueryParameters = (IDictionary<string, StringValues>)request.Query.PairToDictionary<string, StringValues>();
+                var dict = new Dictionary<string, IEnumerable<string>>();
+                foreach (var item in request.Query)
+                {
+                    dict[item.Key] = item.Value;
+                }
+                dto.Request.QueryParameters = dict;
             }
             catch (Exception ex)
             {
@@ -31,7 +36,12 @@ namespace IRO.Mvc.Core
             }
             try
             {
-                dto.Request.Headers = (IDictionary<string, StringValues>)request.Headers.PairToDictionary<string, StringValues>();
+                var dict = new Dictionary<string, IEnumerable<string>>();
+                foreach (var item in request.Headers)
+                {
+                    dict[item.Key] = item.Value;
+                }
+                dto.Request.Headers = dict;
             }
             catch (Exception ex)
             {
@@ -48,7 +58,15 @@ namespace IRO.Mvc.Core
             try
             {
                 if (request.HasFormContentType)
-                    dto.Request.FormParameters = (IDictionary<string, StringValues>)request.Form.PairToDictionary<string, StringValues>();
+                {
+                    var dict = new Dictionary<string, IEnumerable<string>>();
+                    foreach (var item in request.Form)
+                    {
+                        dict[item.Key] = item.Value;
+                    }
+                    dto.Request.Headers = dict;
+                }
+
             }
             catch (Exception ex)
             {
@@ -71,7 +89,12 @@ namespace IRO.Mvc.Core
             var resp = httpContext.Response;
             try
             {
-                dto.Response.Headers = (IDictionary<string, StringValues>)resp.Headers.PairToDictionary<string, StringValues>();
+                var dict = new Dictionary<string, IEnumerable<string>>();
+                foreach (var item in resp.Headers)
+                {
+                    dict[item.Key] = item.Value;
+                }
+                dto.Response.Headers = dict;
             }
             catch (Exception ex)
             {

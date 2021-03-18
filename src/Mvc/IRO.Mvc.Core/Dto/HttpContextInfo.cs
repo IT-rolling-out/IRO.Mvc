@@ -25,13 +25,13 @@ namespace IRO.Mvc.Core.Dto
 
             public string BodyText { get; set; }
 
-            public IDictionary<string, StringValues> Headers { get; set; }
+            public IDictionary<string, IEnumerable<string>> Headers { get; set; }
 
             public IDictionary<string, string> Cookies { get; set; }
 
-            public IDictionary<string, StringValues> QueryParameters { get; set; }
+            public IDictionary<string, IEnumerable<string>> QueryParameters { get; set; }
 
-            public IDictionary<string, StringValues> FormParameters { get; set; }
+            public IDictionary<string, IEnumerable<string>> FormParameters { get; set; }
 
             
         }
@@ -46,7 +46,7 @@ namespace IRO.Mvc.Core.Dto
 
             public string BodyText { get; set; }
 
-            public IDictionary<string, StringValues> Headers { get; set; }
+            public IDictionary<string, IEnumerable<string>> Headers { get; set; }
         }
 
     }
