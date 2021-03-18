@@ -13,10 +13,12 @@ namespace IRO.Mvc.MvcExceptionHandler.Services
     public class ResponseModelsFactory
     {
         readonly ILogger _logger;
+        readonly DevExceptionsPageService _devExceptionsPageService;
 
-        public ResponseModelsFactory(ILogger<ResponseModelsFactory> logger)
+        public ResponseModelsFactory(ILogger<ResponseModelsFactory> logger, DevExceptionsPageService devExceptionsPageService)
         {
             _logger = logger;
+            _devExceptionsPageService = devExceptionsPageService;
         }
 
         public async Task<string> CreateDebugUrl(ErrorContext errorContext)
@@ -24,7 +26,7 @@ namespace IRO.Mvc.MvcExceptionHandler.Services
             var ctx = errorContext.HttpContext;
             var htmlText = await ctx.ExecuteDevExceptionPage(errorContext.OriginalException);
 
-            var methodPath = "DevExceptionsPage/" + DevExceptionsPageController.AddException(
+            var methodPath = "DevExceptionsPage/" + _devExceptionsPageService.AddException(
                 htmlText
                 );
             var host = errorContext.Configs.Host ?? "";

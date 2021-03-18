@@ -18,11 +18,18 @@ namespace IRO.Mvc.MvcExceptionHandler
         readonly ResponseModelsFactory _responseModelsFactory;
         readonly JsonSerializerSettings _jsonSerializerSettings;
         readonly ILogger _logger;
+        readonly DevExceptionsPageService _devExceptionsPageService;
 
-        public ExHandlerMiddleware(Action<MvcExceptionHandlerSetup> setupAction, ResponseModelsFactory responseModelsFactory, ILogger<ExHandlerMiddleware> logger)
+        public ExHandlerMiddleware(
+            Action<MvcExceptionHandlerSetup> setupAction, 
+            ResponseModelsFactory responseModelsFactory,
+            ILogger<ExHandlerMiddleware> logger,
+            DevExceptionsPageService devExceptionsPageService
+            )
         {
             _responseModelsFactory = responseModelsFactory;
             _logger = logger;
+            _devExceptionsPageService = devExceptionsPageService;
             _setup = new MvcExceptionHandlerSetup();
             setupAction(_setup);
             _configs = _setup.CreateConfigs();
@@ -37,9 +44,16 @@ namespace IRO.Mvc.MvcExceptionHandler
             _jsonSerializerSettings = _setup.JsonSerializerSettings;
         }
 
-        public async Task RequestProcessing(HttpContext httpContext, Func<Task> next)
+        public async Task RequestProcessing(HttpContext ctx, Func<Task> next)
         {
-            ErrorInfo? errorInfo = null;
+            var url = ctx.Request.Path.Value;
+            if (url.StartsWith("/DevExceptionsPage"))
+            {
+                await _devExceptionsPageService.ShowExceptionPage(ctx);
+                return;
+            }
+
+            ErrorInfo ? errorInfo = null;
             Exception exception = null;
             Exception innerException = null;
             bool exceptionProcessedHere;
@@ -69,10 +83,10 @@ namespace IRO.Mvc.MvcExceptionHandler
                 //Error by http code.
                 if (errorInfo == null && _configs.CanBindByHttpCode)
                 {
-                    bool bodyHasContent = httpContext.Response.ContentLength > 0;
+                    bool bodyHasContent = ctx.Response.ContentLength > 0;
                     if (bodyHasContent)
                         return;
-                    var httpCode = httpContext.Response.StatusCode;
+                    var httpCode = ctx.Response.StatusCode;
                     errorInfo = _errorInfoResolver.TryGetByHttCode(httpCode);
                 }
 
@@ -83,7 +97,7 @@ namespace IRO.Mvc.MvcExceptionHandler
                 else
                 {
                     await OnError(
-                        httpContext,
+                        ctx,
                         errorInfo.Value,
                         exception,
                         innerException

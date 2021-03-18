@@ -16,10 +16,4 @@ Please look at an readme on github.</Description>
   <ItemGroup>
     <ProjectReference Include="..\IRO.Mvc.Core\IRO.Mvc.Core.csproj" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Compile Update="Controllers\DevExceptionsPageController.cs">
-      <SubType>Code</SubType>
-    </Compile>
-  </ItemGroup>
  </Project>
