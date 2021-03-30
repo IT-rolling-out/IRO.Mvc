@@ -98,7 +98,7 @@ namespace IRO.Mvc.MvcExceptionHandler.Services
             {
                 requestInfo.ContentLength = req.ContentLength ?? 0;
                 var lengthInKB = requestInfo.ContentLength / 1024;
-                if (lengthInKB <= 500)
+                if (lengthInKB <= 500 && req.Form?.Files?.Count == 0)
                 {
                     requestInfo.BodyText = await httpContext.GetRequestBodyText();
                 }

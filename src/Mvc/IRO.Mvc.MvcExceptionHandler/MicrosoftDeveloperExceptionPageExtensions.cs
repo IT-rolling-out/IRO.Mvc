@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.Net.Http.Headers;
 
 namespace IRO.Mvc.MvcExceptionHandler
 {
@@ -22,7 +23,13 @@ namespace IRO.Mvc.MvcExceptionHandler
         /// </summary>
         public static async Task<string> ExecuteDevExceptionPage(this HttpContext currentHttpContext, Exception exception, HttpContext originalHttpContext = null)
         {
-            originalHttpContext = originalHttpContext ?? currentHttpContext;
+            //Add this headers to make excpetion page always pretty.
+            currentHttpContext.Request.Headers[HeaderNames.Accept] =
+                "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9";
+            currentHttpContext.Request.Headers[HeaderNames.UserAgent] =
+                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36";
+
+            originalHttpContext ??= currentHttpContext;
             var swapStream = new MemoryStream();
             var originalResponseBody = currentHttpContext.Response.Body;
             try
@@ -63,8 +70,8 @@ namespace IRO.Mvc.MvcExceptionHandler
                 currentHttpContext.Response.Body = originalResponseBody;
             }
 
-            
-            
+
+
         }
     }
 }
