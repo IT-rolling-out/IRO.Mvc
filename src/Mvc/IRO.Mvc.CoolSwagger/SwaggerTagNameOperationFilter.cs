@@ -50,13 +50,13 @@ namespace IRO.Mvc.CoolSwagger
         public void Apply(OpenApiOperation operation, OperationFilterContext context)
         {
             MethodInfo methodInfo = context.MethodInfo;
-            SwaggerTagNameAttribute tagNameAttribute = CustomAttributeExtensions.GetCustomAttribute<SwaggerTagNameAttribute>(methodInfo);
+            SwaggerTagNameAttribute tagNameAttribute = methodInfo.GetCustomAttribute<SwaggerTagNameAttribute>();
             if (tagNameAttribute == null)
             {
                 Type reflectedType = methodInfo.ReflectedType;
                 tagNameAttribute =
                     reflectedType != null ?
-                    CustomAttributeExtensions.GetCustomAttribute<SwaggerTagNameAttribute>(reflectedType, false) :
+                    reflectedType.GetCustomAttribute<SwaggerTagNameAttribute>(false) :
                     null;
             }
             if (tagNameAttribute != null)
@@ -72,7 +72,7 @@ namespace IRO.Mvc.CoolSwagger
                 openApiOperation.Tags = openApiTagList;
             }
             operation.OperationId = (methodInfo).Name;
-            SwaggerOperationAttribute customAttribute = CustomAttributeExtensions.GetCustomAttribute<SwaggerOperationAttribute>(methodInfo);
+            SwaggerOperationAttribute customAttribute = methodInfo.GetCustomAttribute<SwaggerOperationAttribute>();
             if (customAttribute == null)
                 return;
             operation.OperationId = customAttribute.OperationId;
