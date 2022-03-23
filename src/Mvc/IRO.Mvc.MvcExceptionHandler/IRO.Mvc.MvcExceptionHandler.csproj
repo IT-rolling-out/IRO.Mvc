@@ -9,7 +9,7 @@ Please look at an readme on github.</Description>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="IRO.Reflection.Core" Version="5.0.1" />
+    <PackageReference Include="IRO.Reflection.Core" Version="5.0.3" />
     <PackageReference Include="Microsoft.AspNetCore.App" Version="2.2.8" />
   </ItemGroup>
 

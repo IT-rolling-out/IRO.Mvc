@@ -1,8 +1,7 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.IO;
 using System.Threading.Tasks;
-using IRO.Common.Services;
-using Microsoft.AspNetCore.Http;
 
 namespace IRO.Mvc.Core
 {
@@ -52,7 +51,7 @@ namespace IRO.Mvc.Core
             return text;
         }
 
-        static async Task<string> ReadStreamAsync(Stream stream)
+        private static async Task<string> ReadStreamAsync(Stream stream)
         {
             var position = stream.Position;
             stream.Position = 0;
@@ -61,7 +60,7 @@ namespace IRO.Mvc.Core
             return responseBody;
         }
 
-        static void CheckRewindMiddleware(HttpContext ctx)
+        private static void CheckRewindMiddleware(HttpContext ctx)
         {
             if (!ctx.Items.ContainsKey(RewindHttpStreamsMiddleware.RewindHttpName))
             {
